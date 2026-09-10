@@ -1,0 +1,21 @@
+# Secrets
+.env
+.env.*
+!.env.example
+env
+
+# Dependencies
+node_modules/
+/package.json
+/bun.lock
+/plugins/headroom.js
+
+# Temporary files
+.cache/
+*.log
+*.tmp
+*.bak
+*.bak.*
+
+# Lockfiles from other package managers
+package-lock.json

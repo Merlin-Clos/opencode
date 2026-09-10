@@ -1,0 +1,85 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "openai/gpt-5.6-luna",
+  "instructions": [
+    "~/.config/opencode/instructions/*.md"
+  ],
+  "subagent_depth": 2,
+  "agent": {
+    "build": {
+      "model": "openai/gpt-5.6-luna",
+      "reasoningEffort": "low"
+    },
+    "task-discovery": {
+      "model": "openai/gpt-5.6-terra",
+      "reasoningEffort": "low"
+    },
+    "task-implementation": {
+      "model": "opencode-go/deepseek-flash",
+      "reasoningEffort": "high"
+    },
+    "task-review-coordinator": {
+      "model": "openai/gpt-5.6-sol",
+      "reasoningEffort": "low"
+    },
+    "task-review-correctness": {
+      "model": "opencode-go/deepseek-flash",
+      "reasoningEffort": "high"
+    },
+    "task-review-maintainability": {
+      "model": "openai/gpt-5.6-terra",
+      "reasoningEffort": "low"
+    },
+    "task-review-conventions": {
+      "model": "opencode-go/glm-5.3-flash"
+    },
+    "task-review-security": {
+      "model": "openai/gpt-5.6-sol",
+      "reasoningEffort": "low"
+    },
+    "task-review-performance": {
+      "model": "opencode-go/deepseek-flash",
+      "reasoningEffort": "low"
+    },
+    "task-review-tests": {
+      "model": "opencode-go/deepseek-flash",
+      "reasoningEffort": "low"
+    },
+    "task-review-tooling": {
+      "model": "openai/gpt-5.6-luna",
+      "reasoningEffort": "low"
+    }
+  },
+  "server": {
+    "hostname": "0.0.0.0",
+    "port": 4096
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:CONTEXT7_API_KEY}"
+      },
+      "enabled": true
+    },
+    "nuxt": {
+      "type": "remote",
+      "url": "https://nuxt.com/mcp",
+      "enabled": false
+    },
+    "nuxt-ui": {
+      "type": "remote",
+      "url": "https://ui.nuxt.com/mcp",
+      "enabled": true
+    },
+    "mempalace": {
+      "type": "local",
+      "command": [
+        "/home/sten/.local/bin/mempalace-mcp"
+      ],
+      "enabled": false
+    }
+  }
+}
