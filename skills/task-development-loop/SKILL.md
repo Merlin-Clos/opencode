@@ -5,7 +5,8 @@ description: Implement an approved software task in the current repository with 
 
 # Development Loop
 
-Implement the agreed behavior, prove it, and stop for developer review. Apply the
+Implement the agreed behavior, prove it, and provide one final handoff for developer
+review. Do not stop between intermediate steps or acceptance criteria. Apply the
 repository-wide and path-specific instructions; do not repeat them in task notes.
 
 ## Resolve the Task

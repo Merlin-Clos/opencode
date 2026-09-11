@@ -5,7 +5,6 @@ description: Frame a software task against the current repository before impleme
 
 # Brainstorm a Task
 
-Delegate repository discovery and task framing to the `task-discovery` agent.
 Do not invoke another planning or brainstorm skill.
 
 Use additional text after `/task-brainstorm` as the task to frame.

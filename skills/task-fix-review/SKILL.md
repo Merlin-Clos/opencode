@@ -5,8 +5,6 @@ description: Record review decisions and correct only the findings selected by t
 
 # Fix Selected Review Findings
 
-Delegate correction to the `task-implementation` agent in review-correction mode.
-
 Use only the MonAiAgent task workflow. Do not invoke the built-in `code-review`,
 a generic fix skill, or another review workflow.
 

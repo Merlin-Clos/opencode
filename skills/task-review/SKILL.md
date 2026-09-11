@@ -5,8 +5,6 @@ description: Run and save an incremental multi-agent review of the current imple
 
 # Review the Current Task
 
-Delegate this workflow to the `task-review-coordinator` agent.
-
 Use only the MonAiAgent task-review workflow and its
 `task-review-*` specialist agents. Do not invoke the built-in `code-review`,
 another review skill, or a generic review workflow.

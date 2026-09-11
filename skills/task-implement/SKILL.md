@@ -5,10 +5,13 @@ description: Implement a direct request or the current saved task and validate i
 
 # Implement a Task
 
-Delegate implementation to the `task-implementation` agent.
-
 Use the `task-development-loop` skill as the implementation workflow. Do not use
 another built-in implementation or planning skill.
+
+Complete every in-scope acceptance criterion in the same invocation. Do not return
+a progress-only message between criteria or after an intermediate successful step.
+Continue with the next tool call until the task is complete, a blocking decision is
+required, or an unrecoverable failure prevents further work.
 
 Use additional text after `/task-implement` as a direct task. When no direct task
 is supplied, resolve the current saved task through
