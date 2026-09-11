@@ -113,6 +113,12 @@ compresses that context before it reaches the model. In this workflow, its
 native OpenCode plugin routes provider traffic through the local Headroom proxy
 and exposes retrieval of the original content when more detail is needed.
 
+Expect Headroom to use noticeable RAM and CPU: keeping a local compression
+pipeline and its caches warm costs memory and compute. Modest hardware runs it
+without trouble, but constrained machines should plan for it. It stays worth
+it — the tokens saved outweigh the running cost, and memory already paid for
+is better used than left idle.
+
 Headroom is modular. The official
 [installation extras table](https://docs.headroomlabs.ai/docs/installation#extras)
 separates the core package—including content routing, cache alignment, and

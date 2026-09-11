@@ -124,6 +124,13 @@ inner project knowledge.
 The internal `task-development-loop` skill is loaded by implementation workflows.
 It is not a manual entry point.
 
+Do not invoke it by hand: it is the shared implementation engine behind
+`/task-implement` and `/task-fix-review`. It still shows up in the `/` menu
+because a skill is only shadowed when a same-named command takes precedence —
+every other skill has one, `task-development-loop` does not. Keeping its rules
+in one shared place avoids duplicating them across both consumers, where an
+update on one side could silently change behavior on the other.
+
 ## Task Statuses
 
 The normal persisted lifecycle is:
@@ -176,6 +183,18 @@ last captured review state.
 `in-progress` correction only when persisted accepted findings and an incomplete
 Review Fix Record identify the unfinished work. The record keeps `Status:
 in-progress` until the correction is complete.
+
+### Review in a fresh session
+
+Run `/task-review` in a fresh OpenCode session instead of the one that planned
+and implemented the change. A reviewer running in the implementer's session
+inherits its bias toward accepting the code; a fresh session recovers the full
+task context from the saved `task.md` and still judges the diff on its own
+merits. This mirrors the implementer/reviewer split the Bun team used when
+rewriting Bun in Rust with Claude: "Usually with humans, the person reviewing
+the code is not the person who authored the code... The implementer doesn't
+review. The reviewer doesn't implement."
+([Rewriting Bun in Rust](https://bun.com/blog/bun-in-rust)).
 
 ## Nested Repositories and Submodules
 
