@@ -10,6 +10,9 @@ node_modules/
 /bun.lock
 /plugins/headroom.js
 
+# Local OpenCode config (copy opencode.example.jsonc to create it)
+/opencode.jsonc
+
 # Temporary files
 .cache/
 *.log

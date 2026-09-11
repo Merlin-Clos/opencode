@@ -1,0 +1,62 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // The default and small models are free OpenCode Zen models. Zen rotates and
+  // deprecates free models over time, so update these ids when they change.
+  // Replace them with any provider and model you have connected; this config
+  // does not assume a specific provider. Ids use the "provider/model" format.
+  "model": "opencode/muse-spark-1.3-contributor-free",
+  "instructions": [
+    "~/.config/opencode/instructions/*.md"
+  ],
+  "subagent_depth": 2,
+  "small_model": "opencode/nemotron-3.5-lightning-free",
+  // Example: bind a model and a reasoning effort per agent by uncommenting and
+  // adapting this block. Provider prefixes below are examples only; use
+  // whatever providers you have connected.
+  //
+  // "agent": {
+  //   "build": { "model": "openai/gpt-5.6-luna", "reasoningEffort": "low" },
+  //   "task-discovery": { "model": "openai/gpt-5.6-terra", "reasoningEffort": "low" },
+  //   "task-implementation": { "model": "anthropic/claude-sonnet-4-6", "reasoningEffort": "high" },
+  //   "task-review-coordinator": { "model": "openai/gpt-5.6-sol", "reasoningEffort": "low" },
+  //   "task-review-correctness": { "model": "deepseek/deepseek-v4-pro", "reasoningEffort": "high" },
+  //   "task-review-maintainability": { "model": "mistral/magistral-medium-latest", "reasoningEffort": "medium" },
+  //   "task-review-conventions": { "model": "mistral/codestral-latest" },
+  //   "task-review-security": { "model": "deepseek/deepseek-v4-pro", "reasoningEffort": "max" },
+  //   "task-review-performance": { "model": "xai/grok-4.6", "reasoningEffort": "max" },
+  //   "task-review-tests": { "model": "moonshotai/kimi-k3", "reasoningEffort": "high" },
+  //   "task-review-tooling": { "model": "anthropic/claude-haiku-4-5-20251001", "reasoningEffort": "low" }
+  // },
+  "server": {
+    "hostname": "0.0.0.0",
+    "port": 4096
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:CONTEXT7_API_KEY}"
+      },
+      "enabled": true
+    },
+    "nuxt": {
+      "type": "remote",
+      "url": "https://nuxt.com/mcp",
+      "enabled": false
+    },
+    "nuxt-ui": {
+      "type": "remote",
+      "url": "https://ui.nuxt.com/mcp",
+      "enabled": false
+    },
+    "mempalace": {
+      "type": "local",
+      "command": [
+        "/home/sten/.local/bin/mempalace-mcp"
+      ],
+      "enabled": false
+    }
+  }
+}
