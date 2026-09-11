@@ -184,6 +184,8 @@ last captured review state.
 Review Fix Record identify the unfinished work. The record keeps `Status:
 in-progress` until the correction is complete.
 
+## Usage Tips
+
 ### Review in a fresh session
 
 Run `/task-review` in a fresh OpenCode session instead of the one that planned
@@ -195,6 +197,19 @@ rewriting Bun in Rust with Claude: "Usually with humans, the person reviewing
 the code is not the person who authored the code... The implementer doesn't
 review. The reviewer doesn't implement."
 ([Rewriting Bun in Rust](https://bun.com/blog/bun-in-rust)).
+
+### Prefer an open model for security review
+
+The `task-review-security` agent reads real weakness and exploit paths. Large
+closed-provider models often refuse that work: their guardrails cannot reliably
+tell an incident responder from an attacker. During the July 2026 OpenAI/Hugging
+Face incident, Hugging Face's responders could not use commercial frontier
+models to review attacker exploit payloads and instead ran an open-weight model
+(GLM 5.2) on their own infrastructure to finish the forensics
+([OpenAI](https://openai.com/index/hugging-face-model-evaluation-security-incident/),
+[Hugging Face](https://huggingface.co/blog/security-incident-july-2026)). Bind a
+capable open-weight model to `task-review-security` rather than a heavily
+guardrailed closed model.
 
 ## Nested Repositories and Submodules
 

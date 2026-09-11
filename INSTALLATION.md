@@ -49,6 +49,27 @@ Official references:
 - [OpenCode agent skills](https://opencode.ai/docs/skills/)
 - [OpenCode plugins](https://opencode.ai/docs/plugins/)
 
+## OpenCode Zen
+
+### Why it is used
+
+OpenCode Zen is the OpenCode team's curated and benchmarked model gateway. It is
+the workflow's default provider because OpenCode is an open-source project that
+moves quickly, Zen selects and verifies models that work well as coding agents,
+and its pricing keeps cache reads cheap. It also offers free models, which is why
+the default `model` and `small_model` in `opencode.json` are Zen free models.
+
+Free Zen models are temporary: the team rotates or deprecates them over time.
+Keep those two ids current, or replace them with any provider and model you have
+connected. The config is portable, does not assume a specific provider, and lets
+you bind a different model and reasoning effort to each agent, as the commented
+`agent` example in `opencode.json` shows.
+
+Zen is optional and has no lock-in: you can use it alongside your own provider
+keys. Run `/connect` in the TUI and select OpenCode Zen, or use `/models` to pick
+a model. See the official
+[OpenCode Zen documentation](https://opencode.ai/docs/zen/).
+
 ## Context7
 
 ### Why it is used
