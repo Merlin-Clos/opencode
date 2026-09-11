@@ -29,7 +29,7 @@ managers, provider authentication, and upgrades.
 Use this repository as the global OpenCode configuration directory at
 `~/.config/opencode`. Its main integration points are:
 
-- `opencode.json` for models, agents, instructions, and MCP servers;
+- `opencode.json` for models, instructions, and MCP servers;
 - `commands/` for the manual `/task-*` entry points;
 - `skills/` and `agents/` for workflow behavior;
 - `scripts/` for persisted task and review state;

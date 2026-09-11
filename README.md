@@ -42,7 +42,7 @@ examples.
 - `scripts/`: persisted task and incremental review state operations.
 - `instructions/`: language, framework, test, and generated-code guidance.
 - `rules/`: local command permission rules.
-- `opencode.json`: global models, agents, instructions, server, and MCP settings.
+- `opencode.json`: global models, instructions, server, and MCP settings.
 - `AGENTS.md`: repository-wide implementation rules.
 - `WORKFLOW.md`: lifecycle, persistence, review, and nested-repository behavior.
 - `INSTALLATION.md`: official setup sources and local integration instructions.
