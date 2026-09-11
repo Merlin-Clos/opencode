@@ -27,9 +27,23 @@ managers, provider authentication, and upgrades.
 ### Connect this repository
 
 Use this repository as the global OpenCode configuration directory at
-`~/.config/opencode`. Its main integration points are:
+`~/.config/opencode`. The tracked `opencode.example.jsonc` is a template, not the
+active config. Copy it to `opencode.jsonc`, replacing any OpenCode default, then
+customize it:
 
-- `opencode.json` for models, instructions, and MCP servers;
+```bash
+cp ~/.config/opencode/opencode.example.jsonc ~/.config/opencode/opencode.jsonc
+```
+
+Keep at least the `instructions` entry
+(`~/.config/opencode/instructions/*.md`) so the shared instruction modules load.
+`opencode.jsonc` is git-ignored and belongs to the machine, so your providers,
+models, and per-agent bindings are never committed. OpenCode prefers
+`opencode.jsonc` over `opencode.json`.
+
+Its main integration points are:
+
+- `opencode.example.jsonc` for the config template (models, instructions, MCP);
 - `commands/` for the manual `/task-*` entry points;
 - `skills/` and `agents/` for workflow behavior;
 - `scripts/` for persisted task and review state;
@@ -57,13 +71,14 @@ OpenCode Zen is the OpenCode team's curated and benchmarked model gateway. It is
 the workflow's default provider because OpenCode is an open-source project that
 moves quickly, Zen selects and verifies models that work well as coding agents,
 and its pricing keeps cache reads cheap. It also offers free models, which is why
-the default `model` and `small_model` in `opencode.json` are Zen free models.
+the default `model` and `small_model` in `opencode.example.jsonc` are Zen free
+models.
 
 Free Zen models are temporary: the team rotates or deprecates them over time.
 Keep those two ids current, or replace them with any provider and model you have
 connected. The config is portable, does not assume a specific provider, and lets
 you bind a different model and reasoning effort to each agent, as the commented
-`agent` example in `opencode.json` shows.
+`agent` example in `opencode.example.jsonc` shows.
 
 Zen is optional and has no lock-in: you can use it alongside your own provider
 keys. Run `/connect` in the TUI and select OpenCode Zen, or use `/models` to pick
@@ -100,15 +115,15 @@ The API key is recommended for higher rate limits.
 
 ### Connect it to this workflow
 
-No local Context7 server is required by this configuration. `opencode.json`
-already registers `https://mcp.context7.com/mcp` as a remote MCP server and reads
+No local Context7 server is required by this configuration. `opencode.example.jsonc`
+registers `https://mcp.context7.com/mcp` as a remote MCP server and reads
 `CONTEXT7_API_KEY` from the OpenCode process environment.
 
 `.env.example` documents the expected variable name. If the OpenCode launch method
 loads a local environment file, copy that template to the ignored `.env` file and
 replace the placeholder. Otherwise, expose the same variable through the shell or
-service that starts OpenCode. Never commit the key or place it directly in
-`opencode.json`.
+service that starts OpenCode. Never commit the key or place it directly in your
+local `opencode.jsonc`.
 
 Use OpenCode's MCP management commands to confirm that `context7` is enabled and
 reachable. See the [official OpenCode MCP documentation](https://opencode.ai/docs/mcp-servers/)
@@ -186,6 +201,11 @@ Make the proxy available at `HEADROOM_PROXY_URL`, or at the plugin's default
 `http://127.0.0.1:8787`. Use Headroom's official diagnostics and statistics to
 verify the proxy, then send an OpenCode request and confirm that the request count
 increases. OpenCode loads local plugins at startup.
+
+No `provider` or `model` section is needed in `opencode.jsonc` for this path: the
+plugin intercepts provider traffic in process and uses `HEADROOM_PROXY_URL`. The
+`provider.headroom` block written by `headroom wrap opencode` and by persistent
+installs is only needed when using that route instead of the plugin.
 
 Do not combine this persistent plugin path with `headroom wrap opencode` unless you
 intend to replace the routing strategy. The wrapper manages runtime configuration
