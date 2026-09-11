@@ -1,97 +1,54 @@
-# OpenCode Configuration
+# OpenCode Workflow Configuration
 
-Personal OpenCode configuration: agents, commands, instructions, rules, and
-skills.
+This repository centralizes a global OpenCode task workflow, reusable technical
+instructions, and optional local integrations.
 
-## Requirements
+## Why This Repository Exists
 
-- OpenCode
-- Python 3.10+ and `uv` for Headroom
-- RTK
-- A Context7 API key
+A centralized setup helps to:
 
-## Installation
+- make task framing, implementation, validation, and review consistent;
+- keep automated workflow behavior and developer decisions visible;
+- reuse language, framework, and test guidance across repositories;
+- preserve development knowledge in versioned files.
 
-### Headroom
+Read the detailed [task workflow](./WORKFLOW.md) and the
+[installation and integration guide](./INSTALLATION.md).
 
-Install the Headroom CLI as an isolated `uv` tool:
+## Task Commands
 
-```bash
-uv tool install --python 3.13 "headroom-ai[all]"
-headroom --version
-```
+Use these commands as the manual workflow entry points in OpenCode:
 
-Start the local optimization proxy and verify it:
+- `/task-brainstorm` frames a request and prepares an approved task contract.
+- `/task-implement` implements a direct request or the current saved task.
+- `/task-review` runs the incremental multi-agent review workflow for a saved task.
+- `/task-fix-review` records developer decisions and corrects selected findings.
 
-```bash
-headroom proxy --port 8787
-headroom doctor
-```
+The internal `task-development-loop` skill is loaded by implementation workflows
+and is not a manual command.
 
-Use `headroom dashboard` while the proxy is running. For a persistent
-deployment, use the official `headroom install apply` workflow instead of
-committing service files or runtime state to this repository.
+## Responsibility Layers
 
-### RTK
+The workflow, reusable `instructions/`, and repository-owned `AGENTS.md` files
+have separate responsibilities. See
+[`WORKFLOW.md`](./WORKFLOW.md#responsibility-layers) for the complete model and
+examples.
 
-Install the Rust Token Killer CLI using the official installer:
+## Repository Map
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
-export PATH="$HOME/.local/bin:$PATH"
-rtk --version
-rtk gain
-```
+- `commands/`: manual `/task-*` entry points.
+- `skills/`: discovery, implementation, review, and correction workflows.
+- `agents/`: specialized task and review roles.
+- `scripts/`: persisted task and incremental review state operations.
+- `instructions/`: language, framework, test, and generated-code guidance.
+- `rules/`: local command permission rules.
+- `opencode.json`: global models, agents, instructions, server, and MCP settings.
+- `AGENTS.md`: repository-wide implementation rules.
+- `WORKFLOW.md`: lifecycle, persistence, review, and nested-repository behavior.
+- `INSTALLATION.md`: official setup sources and local integration instructions.
 
-Enable the optional OpenCode integration:
+## Optional Integrations
 
-```bash
-rtk init -g --opencode
-```
-
-RTK filters supported shell-command output. Check the installed version before
-using a wrapper:
-
-```bash
-rtk --help
-rtk <command> --help
-```
-
-`rtk proxy <command> ...` runs a command without output filtering but tracks
-usage. It is not a network proxy. `rtk run -c '...'` runs a raw shell command
-without filtering or usage tracking.
-
-### Context7
-
-This configuration uses Context7 as a remote MCP server. No local Context7
-binary is required. Create an API key at <https://context7.com/dashboard>, then
-store it in the ignored `.env` file:
-
-```bash
-cp .env.example .env
-```
-
-Set the value in `.env`:
-
-```dotenv
-CONTEXT7_API_KEY=your_api_key_here
-```
-
-The MCP endpoint is configured in `opencode.json` and reads
-`CONTEXT7_API_KEY` from the environment. Never commit `.env` or an actual API
-key. Restart OpenCode after changing configuration or environment values.
-
-## Verification
-
-```bash
-opencode --version
-headroom doctor
-rtk --version
-rtk gain
-```
-
-## References
-
-- [Headroom documentation](https://headroom-docs.vercel.app/docs)
-- [RTK installation guide](https://github.com/rtk-ai/rtk/blob/develop/INSTALL.md)
-- [Context7 documentation](https://context7.com/docs)
+[Context7](./INSTALLATION.md#context7),
+[Headroom](./INSTALLATION.md#headroom), and
+[RTK](./INSTALLATION.md#rtk).
