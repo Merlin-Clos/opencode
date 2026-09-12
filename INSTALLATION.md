@@ -1,13 +1,23 @@
 # Installation and Integrations
 
 This repository owns the wiring between OpenCode and its supporting tools. It does
-not mirror third-party installation instructions: those instructions change over
-time and belong to each upstream project. Always install or upgrade a component
-from the official source linked below, then apply the repository-specific
-integration described here.
+not copy third-party installation instructions. Those instructions change over
+time and belong to each upstream project.
 
-OpenCode is required. Optional integrations are
-[Context7](#context7), [Headroom](#headroom), and [RTK](#rtk).
+> [!IMPORTANT]
+> **Use upstream documentation for installation**
+>
+> Install or upgrade each component from the official source linked below. Then
+> apply the repository-specific integration described in this document.
+
+OpenCode is required. The supporting integrations are optional, but recommended
+because they improve documentation lookup, context quality, and shell output.
+
+| Integration | Main benefit | Required? |
+| --- | --- | --- |
+| [Context7](#context7) | Current, version-specific documentation. | No |
+| [Headroom](#headroom) | Cleaner, smaller model context. | No, recommended |
+| [RTK](#rtk) | More focused shell output. | No, recommended |
 
 ## OpenCode
 
@@ -21,33 +31,38 @@ agents, skills, and instructions. The orchestration model is documented under
 
 Install OpenCode and configure an LLM provider using the
 [official OpenCode introduction and installation guide](https://opencode.ai/docs/).
-Use the upstream guide as the source of truth for supported platforms, package
-managers, provider authentication, and upgrades.
+Use that guide as the source of truth for supported platforms, package managers,
+provider authentication, and upgrades.
 
 ### Connect this repository
 
 Use this repository as the global OpenCode configuration directory at
 `~/.config/opencode`. The tracked `opencode.example.jsonc` is a template, not the
-active config. Copy it to `opencode.jsonc`, replacing any OpenCode default, then
-customize it:
+active configuration.
+
+Copy it to `opencode.jsonc`, replacing any OpenCode default, then customize it:
 
 ```bash
 cp ~/.config/opencode/opencode.example.jsonc ~/.config/opencode/opencode.jsonc
 ```
 
-Keep at least the `instructions` entry
-(`~/.config/opencode/instructions/*.md`) so the shared instruction modules load.
-`opencode.jsonc` is git-ignored and belongs to the machine, so your providers,
-models, and per-agent bindings are never committed. OpenCode prefers
+> [!TIP]
+> **Keep the instructions entry**
+>
+> Preserve `~/.config/opencode/instructions/*.md` in the local configuration so
+> the shared instruction modules continue to load.
+
+`opencode.jsonc` is git-ignored and belongs to the machine. Providers, models, and
+per-agent bindings in that file are never committed. OpenCode prefers
 `opencode.jsonc` over `opencode.json`.
 
 Its main integration points are:
 
-- `opencode.example.jsonc` for the config template (models, instructions, MCP);
-- `commands/` for the manual `/task-*` entry points;
-- `skills/` and `agents/` for workflow behavior;
-- `scripts/` for persisted task and review state;
-- `rules/` for local command permissions;
+- `opencode.example.jsonc` for the config template (models, instructions, MCP).
+- `commands/` for the manual `/task-*` entry points.
+- `skills/` and `agents/` for workflow behavior.
+- `scripts/` for persisted task and review state.
+- `rules/` for local command permissions.
 - `instructions/` and `AGENTS.md` for technical and repository-wide guidance.
 
 Keep architecture, build commands, generated-file rules, and other instructions
@@ -99,7 +114,7 @@ Context7 gives agents access to current, version-specific documentation and code
 examples through MCP. Agents use it when a task depends on a library, framework,
 SDK, API, or configuration contract instead of assuming that remembered behavior
 is still valid. Repository code, dependency versions, and tests remain the primary
-local evidence; Context7 supplies the current upstream reference needed to
+local evidence. Context7 supplies the current upstream reference needed to
 interpret them correctly.
 
 Its free plan is sufficiently generous for the documentation lookups expected by
@@ -119,6 +134,13 @@ No local Context7 server is required by this configuration. `opencode.example.js
 registers `https://mcp.context7.com/mcp` as a remote MCP server and reads
 `CONTEXT7_API_KEY` from the OpenCode process environment.
 
+> [!NOTE]
+> **The API key is recommended**
+>
+> Context7's official documentation recommends a free API key for higher rate
+> limits. It is not described as a strict prerequisite, but this workflow should
+> configure it rather than rely on undocumented anonymous limits.
+
 `.env.example` documents the expected variable name. If the OpenCode launch method
 loads a local environment file, copy that template to the ignored `.env` file and
 replace the placeholder. Otherwise, expose the same variable through the shell or
@@ -131,12 +153,18 @@ and [Context7 documentation](https://context7.com/docs).
 
 ## Saving Tokens
 
-Headroom and RTK are included for the same practical reason: they consume fewer
-tokens per task. Against a fixed AI-provider subscription or quota, tokens saved
-on one task remain available for more tasks, longer tasks, or more retries. A
-smaller accumulated context also helps at the end of long sessions: when
-OpenCode compacts the session, less of what is kept is noise, so less useful
-context is lost. Neither tool replaces source inspection or validation.
+Headroom and RTK are equally important parts of the context pipeline. They improve
+different parts of the same workflow:
+
+- Headroom compresses model traffic and helps keep long conversations clean.
+- RTK removes repetitive shell output before it enters the model context.
+
+Together, they reduce token usage and keep the conversation focused on useful
+information. Under a fixed provider quota, saved tokens remain available for more
+work.
+
+These tools improve the quality of long sessions as well as their cost. Neither
+tool replaces source inspection or validation.
 
 The sections below describe what each tool does and how it is wired into this
 workflow.
@@ -149,16 +177,20 @@ compresses that context before it reaches the model. In this workflow, its
 native OpenCode plugin routes provider traffic through the local Headroom proxy
 and exposes retrieval of the original content when more detail is needed.
 
-Expect Headroom to use noticeable RAM and CPU: keeping a local compression
+> [!NOTE]
+> **Headroom is optional, but recommended**
+>
+> It does not prevent OpenCode from working when disabled. In long sessions, it
+> keeps the model context cleaner, delays compaction, and reduces token usage.
+
+Expect Headroom to use noticeable RAM and CPU. Keeping a local compression
 pipeline and its caches warm costs memory and compute. Modest hardware runs it
-without trouble, but constrained machines should plan for it. It stays worth
-it — the tokens saved outweigh the running cost, and memory already paid for
-is better used than left idle.
+without trouble, but constrained machines should plan for it.
 
 Headroom is modular. The official
 [installation extras table](https://docs.headroomlabs.ai/docs/installation#extras)
-separates the core package—including content routing, cache alignment, and
-structured/JSON processing—from optional capabilities. Its `[all]` row shows the
+separates the core package, including content routing, cache alignment, and
+structured/JSON processing, from optional capabilities. Its `[all]` row shows the
 full built-in runtime bundle, including the proxy, code and ML compression,
 memory, relevance scoring, image compression, reports, OpenTelemetry export,
 evaluations, voice, HTML extraction, MCP tools, and spreadsheet support. The same
@@ -202,10 +234,17 @@ Make the proxy available at `HEADROOM_PROXY_URL`, or at the plugin's default
 verify the proxy, then send an OpenCode request and confirm that the request count
 increases. OpenCode loads local plugins at startup.
 
-No `provider` or `model` section is needed in `opencode.jsonc` for this path: the
-plugin intercepts provider traffic in process and uses `HEADROOM_PROXY_URL`. The
-`provider.headroom` block written by `headroom wrap opencode` and by persistent
-installs is only needed when using that route instead of the plugin.
+> [!IMPORTANT]
+> **Keep the native plugin and provider setup separate**
+>
+> This setup uses the native `headroom-opencode` plugin. Keep your normal OpenCode
+> provider and model configuration. The plugin intercepts that traffic in process
+> and sends it through the proxy at `HEADROOM_PROXY_URL`.
+>
+> Do not add a `provider.headroom` block or replace your model with a
+> `headroom/...` model unless you switch to `headroom wrap opencode` or its
+> persistent provider installation. Those are alternative routing modes, not
+> additional configuration for the native plugin.
 
 Do not combine this persistent plugin path with `headroom wrap opencode` unless you
 intend to replace the routing strategy. The wrapper manages runtime configuration
@@ -220,9 +259,14 @@ Additional official references:
 
 Some shell commands produce large, repetitive output. RTK intercepts the commands
 it supports and returns a shorter representation that keeps results and failures
-while dropping noise. This reduces the shell-output share of model input. It does
-not change OpenCode's native file tools, and output reduction does not translate
-one-to-one into bill reduction.
+while dropping noise.
+
+> [!NOTE]
+> **RTK is optional, but recommended**
+>
+> RTK only affects supported shell commands. It does not change OpenCode's native
+> file tools, and output reduction does not translate one-to-one into bill
+> reduction.
 
 The supported surface changes as RTK evolves. Use the official
 [commands section](https://github.com/rtk-ai/rtk#commands) as the single command
@@ -239,7 +283,7 @@ current OpenCode integration, limitations, upgrades, and telemetry behavior.
 #### Connect it to this workflow
 
 After installing RTK, apply the OpenCode integration documented upstream. This
-installs RTK's OpenCode command-rewrite plugin; restart OpenCode afterward so the
+installs RTK's OpenCode command-rewrite plugin. Restart OpenCode afterward so the
 plugin is loaded.
 
 `AGENTS.md` tells the workflow to use the integration only when its
@@ -256,5 +300,5 @@ is being tracked.
 - Keep machine-specific dependencies and ignored plugins reproducible from this
   document and their upstream sources.
 - Review third-party release notes before upgrading integrations.
-- Restart only the affected process after configuration changes; a system-wide
+- Restart only the affected process after configuration changes. A system-wide
   restart is not required.

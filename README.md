@@ -1,31 +1,32 @@
 # OpenCode Workflow Configuration
 
-This repository centralizes a global OpenCode task workflow, reusable technical
-instructions, and optional local integrations.
+This repository provides a global OpenCode workflow with reusable technical
+instructions and optional local integrations.
 
-## Why This Repository Exists
+> [!NOTE]
+> **This repository defines the workflow, not the application**
+>
+> Project architecture, business rules, commands, and validation requirements
+> belong in the target repository's own `AGENTS.md`.
 
-A centralized setup helps to:
+## Start Here
 
-- make task framing, implementation, validation, and review consistent;
-- keep automated workflow behavior and developer decisions visible;
-- reuse language, framework, and test guidance across repositories;
-- preserve development knowledge in versioned files.
-
-Read the detailed [task workflow](./WORKFLOW.md) and the
-[installation and integration guide](./INSTALLATION.md).
+1. Read [the workflow](./WORKFLOW.md) to understand the lifecycle.
+2. Follow [the installation guide](./INSTALLATION.md) to connect this repository.
+3. Copy `opencode.example.jsonc` to your local `opencode.jsonc`.
+4. Start a task with `/task-brainstorm`.
 
 ## Task Commands
 
-Use these commands as the manual workflow entry points in OpenCode:
+| Command | Purpose |
+| --- | --- |
+| `/task-brainstorm` | Frame a request and prepare an approved task contract. |
+| `/task-implement` | Implement and validate a direct request or saved task. |
+| `/task-review` | Run an incremental multi-agent review for a saved task. |
+| `/task-fix-review` | Record decisions and correct selected findings. |
 
-- `/task-brainstorm` frames a request and prepares an approved task contract.
-- `/task-implement` implements a direct request or the current saved task.
-- `/task-review` runs the incremental multi-agent review workflow for a saved task.
-- `/task-fix-review` records developer decisions and corrects selected findings.
-
-The internal `task-development-loop` skill is loaded by implementation workflows
-and is not a manual command.
+The internal `task-development-loop` skill powers the implementation workflows.
+It is not a manual command.
 
 ## Responsibility Layers
 
@@ -36,19 +37,21 @@ examples.
 
 ## Repository Map
 
-- `commands/`: manual `/task-*` entry points.
-- `skills/`: discovery, implementation, review, and correction workflows.
-- `agents/`: specialized task and review roles.
-- `scripts/`: persisted task and incremental review state operations.
-- `instructions/`: language, framework, test, and generated-code guidance.
-- `rules/`: local command permission rules.
-- `opencode.example.jsonc`: config template; copy it to a local `opencode.jsonc`.
-- `AGENTS.md`: repository-wide implementation rules.
-- `WORKFLOW.md`: lifecycle, persistence, review, and nested-repository behavior.
-- `INSTALLATION.md`: official setup sources and local integration instructions.
+| Path | Responsibility |
+| --- | --- |
+| `commands/` | Manual `/task-*` entry points. |
+| `skills/` | Discovery, implementation, review, and correction workflows. |
+| `agents/` | Specialized task and review roles. |
+| `scripts/` | Persisted task and incremental review state. |
+| `instructions/` | Language, framework, test, and generated-code guidance. |
+| `rules/` | Local command permission rules. |
+| `opencode.example.jsonc` | Portable configuration template. |
+| `AGENTS.md` | Repository-wide implementation rules. |
+| `WORKFLOW.md` | Lifecycle, persistence, review, and nested-repository behavior. |
+| `INSTALLATION.md` | Official setup sources and local integration instructions. |
 
 ## Optional Integrations
 
-[Context7](./INSTALLATION.md#context7),
-[Headroom](./INSTALLATION.md#headroom), and
-[RTK](./INSTALLATION.md#rtk).
+[Context7](./INSTALLATION.md#context7), [Headroom](./INSTALLATION.md#headroom),
+and [RTK](./INSTALLATION.md#rtk) improve documentation lookup, context quality,
+and shell output respectively. They are not required to start OpenCode.

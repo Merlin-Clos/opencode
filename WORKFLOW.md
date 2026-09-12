@@ -1,16 +1,26 @@
 # OpenCode Workflow
 
-This configuration separates developer decisions from the automated work
-performed by its OpenCode commands, skills, agents, and scripts.
+This configuration separates developer decisions from the automated work handled
+by OpenCode commands, skills, agents, and scripts.
+
+> [!IMPORTANT]
+> **The workflow stays generic**
+>
+> It provides orchestration and reusable technical guidance. It does not embed
+> the business domain, architecture, or commands of a particular project.
 
 ## Responsibility Layers
 
-This workflow must remain generic to OpenCode and independent of the project in
-which it runs. It owns agent orchestration: framing work, constraining scope,
-choosing useful proof, coordinating review, and making execution structured,
-predictable, and straightforward. It should prevent agents from exploring or
-changing unrelated areas without embedding knowledge of a project's business
-domain or architecture.
+This workflow owns:
+
+- framing work and constraining scope.
+- choosing useful proof.
+- coordinating implementation and review.
+- keeping execution structured and predictable.
+- preventing unrelated exploration or changes.
+
+The target repository owns its business domain, architecture, commands, and local
+rules. That separation keeps this workflow reusable.
 
 The responsibility layers are:
 
@@ -35,8 +45,8 @@ Modules progress from general principles to narrower additions. A specialized
 module adds only the rules unique to its context instead of restating its general
 base.
 
-For example, a future set of modules could be organized like this (the paths are
-illustrative and do not describe the current directory contents):
+For example, a future set of modules could be organized like this. The paths are
+illustrative and do not describe the current directory contents.
 
 ```text
 instructions/
@@ -79,12 +89,15 @@ repository/
 The root file explains the project as a whole and maps its major areas. The files
 under `front/` and `back/` add rules for those areas, with deeper files only where
 a narrower context provides real value. Keep a rule in `AGENTS.md` when it is true
-only for that repository or directory; move it to `instructions/` only when it is
+only for that repository or directory. Move it to `instructions/` only when it is
 generic enough to be reused elsewhere.
 
-In short: the workflow provides the outer orchestration framework,
-`instructions/` factors reusable technical guidance, and `AGENTS.md` supplies the
-inner project knowledge.
+> [!NOTE]
+> **Where a rule belongs**
+>
+> Keep a rule in `AGENTS.md` when it is specific to one repository or directory.
+> Move it to `instructions/` only when another repository can reuse it without
+> importing project-specific assumptions.
 
 ## Quick Start
 
@@ -98,7 +111,7 @@ inner project knowledge.
 
 ## Manual and Automatic Steps
 
-### Manually invoked
+### Manual commands
 
 - `/task-brainstorm` starts repository discovery and contract framing.
 - `/task-implement` starts implementation and validation for a direct request or
@@ -107,7 +120,7 @@ inner project knowledge.
 - `/task-fix-review` records developer decisions and corrects only the selected
   findings.
 
-### Performed by the workflow
+### Automatic work
 
 - `/task-brainstorm` inspects the repository, asks only necessary questions, and
   saves the approved contract only when persistence is chosen.
@@ -124,12 +137,13 @@ inner project knowledge.
 The internal `task-development-loop` skill is loaded by implementation workflows.
 It is not a manual entry point.
 
-Do not invoke it by hand: it is the shared implementation engine behind
-`/task-implement` and `/task-fix-review`. It still shows up in the `/` menu
-because a skill is only shadowed when a same-named command takes precedence —
-every other skill has one, `task-development-loop` does not. Keeping its rules
-in one shared place avoids duplicating them across both consumers, where an
-update on one side could silently change behavior on the other.
+Do not invoke it by hand. It is the shared implementation engine behind
+`/task-implement` and `/task-fix-review`.
+
+It still appears in the `/` menu because only a skill with a same-named command is
+shadowed. The other skills have matching commands, while
+`task-development-loop` does not. Keeping its rules in one place avoids two
+implementations drifting apart.
 
 ## Task Statuses
 
@@ -139,9 +153,11 @@ The normal persisted lifecycle is:
 approved -> in-progress -> implemented
 ```
 
-- `approved`: the saved contract is ready for implementation.
-- `in-progress`: implementation or an accepted review correction is active.
-- `implemented`: the acceptance criteria and required validation are complete.
+| Status | Meaning |
+| --- | --- |
+| `approved` | The saved contract is ready for implementation. |
+| `in-progress` | Implementation or an accepted review correction is active. |
+| `implemented` | The acceptance criteria and required validation are complete. |
 
 An implemented task may return to `in-progress` for `/task-fix-review`, then return
 to `implemented` after the selected correction is complete. A resumed correction
@@ -149,14 +165,16 @@ remains `in-progress` while work or validation is incomplete.
 
 ## Review Findings
 
-Finding states are:
+Finding states:
 
-- `open`: no developer decision exists.
-- `accepted`: selected for correction.
-- `dismissed`: rejected for the current task context.
-- `deferred`: valid but outside the current task.
-- `fixed`: verified by a later `/task-review`.
-- `reopened`: new evidence makes a previous decision relevant again.
+| State | Meaning |
+| --- | --- |
+| `open` | No developer decision exists. |
+| `accepted` | Selected for correction. |
+| `dismissed` | Rejected for the current task context. |
+| `deferred` | Valid, but outside the current task. |
+| `fixed` | Verified by a later `/task-review`. |
+| `reopened` | New evidence makes a previous decision relevant again. |
 
 Review reports are immutable after completion. Developer decisions are recorded in
 `task.md` under `Review Decisions`. A later `/task-review` is the only workflow that
@@ -171,8 +189,8 @@ before the first implementation edit.
 Saved task contracts and review state live under `.copilot/` in the target
 repository. `/task-review` requires all of the following:
 
-- a current saved `task.md`;
-- task status `implemented`;
+- a current saved `task.md`.
+- task status `implemented`.
 - valid task branch and base-commit metadata.
 
 The command creates the first completed review report when no previous report
@@ -188,28 +206,31 @@ in-progress` until the correction is complete.
 
 ### Review in a fresh session
 
-Run `/task-review` in a fresh OpenCode session instead of the one that planned
-and implemented the change. A reviewer running in the implementer's session
-inherits its bias toward accepting the code; a fresh session recovers the full
-task context from the saved `task.md` and still judges the diff on its own
-merits. This mirrors the implementer/reviewer split the Bun team used when
-rewriting Bun in Rust with Claude: "Usually with humans, the person reviewing
-the code is not the person who authored the code... The implementer doesn't
-review. The reviewer doesn't implement."
-([Rewriting Bun in Rust](https://bun.com/blog/bun-in-rust)).
+> [!TIP]
+> **Run the review in a fresh session**
+>
+> Use `/task-review` in a new OpenCode session instead of the session that planned
+> and implemented the change. The new session recovers the task context from
+> `task.md` and evaluates the diff with less author bias.
+>
+> This follows the implementer/reviewer split described by the Bun team in
+> [Rewriting Bun in Rust](https://bun.com/blog/bun-in-rust): "The implementer
+> doesn't review. The reviewer doesn't implement."
 
 ### Prefer an open model for security review
 
-The `task-review-security` agent reads real weakness and exploit paths. Large
-closed-provider models often refuse that work: their guardrails cannot reliably
-tell an incident responder from an attacker. During the July 2026 OpenAI/Hugging
-Face incident, Hugging Face's responders could not use commercial frontier
-models to review attacker exploit payloads and instead ran an open-weight model
-(GLM 5.2) on their own infrastructure to finish the forensics
-([OpenAI](https://openai.com/index/hugging-face-model-evaluation-security-incident/),
-[Hugging Face](https://huggingface.co/blog/security-incident-july-2026)). Bind a
-capable open-weight model to `task-review-security` rather than a heavily
-guardrailed closed model.
+> [!IMPORTANT]
+> **Prefer an open-weight model for security review**
+>
+> The `task-review-security` agent needs to inspect real weakness and exploit
+> paths. Some heavily guarded closed-provider models refuse this work because
+> they cannot reliably distinguish an incident responder from an attacker.
+>
+> During the July 2026 OpenAI and Hugging Face incident, responders used an
+> open-weight model on their own infrastructure to complete the forensics. See
+> the [OpenAI report](https://openai.com/index/hugging-face-model-evaluation-security-incident/)
+> and [Hugging Face report](https://huggingface.co/blog/security-incident-july-2026).
+> Bind a capable open-weight model to `task-review-security` when possible.
 
 ## Nested Repositories and Submodules
 
@@ -244,9 +265,12 @@ configuration is required when a task involves only the root repository. Review
 comparison and state capture use the repositories and base commits stored in the
 task, not later changes to `mon-ai-agent.json`.
 
-This support includes nested repositories in a task's implementation and review
-scope. It is not a procedure for installing this OpenCode configuration as a
-submodule.
+> [!NOTE]
+> **Nested repository scope**
+>
+> This feature includes nested repositories in a task's implementation and review
+> scope. It is not a procedure for installing this OpenCode configuration as a
+> submodule.
 
 ## Repository Map
 
@@ -259,7 +283,7 @@ submodule.
 - `instructions/`: reusable technical guidance described under
   [Responsibility Layers](#responsibility-layers).
 - `rules/`: local command permission rules.
-- `AGENTS.md`: instructions owned by this configuration repository; target
+- `AGENTS.md`: instructions owned by this configuration repository. Target
   repositories provide their own local context.
 - `.copilot/`: optional persisted contracts, review reports, and review state in a
   target repository.
