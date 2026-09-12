@@ -56,13 +56,11 @@ The four machine-level saving rates are:
 These quartiles are descriptive only. Four machines are enough to show that the
 result is not tied to one setup, but not enough to support a population estimate.
 
-```mermaid
-xychart-beta
-    title "RTK saving rate by machine"
-    x-axis ["Machine A", "Machine B", "Machine C", "Machine D"]
-    y-axis "Input tokens saved (%)" 0 --> 100
-    bar [29.5, 49.4, 45.9, 79.3]
-```
+![RTK saving-rate distribution](./assets/rtk-savings-distribution.svg)
+
+The box shows the middle 50% of the machine-level rates. The red line is the
+median, the black dot is the mean, and the whiskers show the observed minimum and
+maximum. The blue band shows one population standard deviation around the mean.
 
 The total saved-token chart is less useful as a visual comparison because
 Machine D accounts for most of the observed volume. The table above preserves
