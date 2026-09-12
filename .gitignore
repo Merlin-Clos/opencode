@@ -11,6 +11,7 @@ node_modules/
 /plugins/headroom.js
 
 # Local OpenCode config (copy opencode.example.jsonc to create it)
+/opencode.json
 /opencode.jsonc
 
 # Temporary files
