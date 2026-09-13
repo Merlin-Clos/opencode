@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="title description">
-  <title id="title">RTK machine-level saving rate distribution</title>
-  <desc id="description">A box-and-whisker plot for four machines. Minimum 29.5 percent, first quartile 37.7 percent, median 47.7 percent, mean 51.0 percent, third quartile 64.4 percent, maximum 79.3 percent. The blue band shows one population standard deviation around the mean, from 32.5 to 69.5 percent.</desc>
+  <title id="title">RTK profile-level saving rate distribution</title>
+  <desc id="description">A box-and-whisker plot for four anonymized profiles. Minimum 29.5 percent, first quartile 37.7 percent, median 47.7 percent, mean 51.0 percent, third quartile 64.4 percent, maximum 79.3 percent. The blue band shows one population standard deviation around the mean, from 32.5 to 69.5 percent.</desc>
   <style>
     .background { fill: #ffffff; }
     .title { fill: #172033; font: 700 20px system-ui, sans-serif; }
@@ -16,7 +16,7 @@
     .legend-line { stroke-width: 3; }
   </style>
   <rect class="background" width="900" height="330" rx="12" />
-  <text class="title" x="40" y="38">RTK saving-rate distribution across four machines</text>
+  <text class="title" x="40" y="38">RTK saving-rate distribution across four profiles</text>
 
   <line class="grid" x1="80" y1="76" x2="820" y2="76" />
   <line class="grid" x1="80" y1="126" x2="820" y2="126" />

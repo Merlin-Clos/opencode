@@ -166,8 +166,7 @@ work.
 These tools improve the quality of long sessions as well as their cost. Neither
 tool replaces source inspection or validation.
 
-See [RTK Results](./RTK.md) for observed usage across four machines and three
-users.
+See [RTK Results](./RTK.md) for the observed usage snapshot.
 
 The sections below describe what each tool does and how it is wired into this
 workflow.
@@ -264,8 +263,8 @@ Some shell commands produce large, repetitive output. RTK intercepts the command
 it supports and returns a shorter representation that keeps results and failures
 while dropping noise.
 
-See the repository's [RTK usage results](./RTK.md) for a snapshot from four
-machines and three users.
+See the repository's [RTK usage results](./RTK.md) for the observed usage
+snapshot.
 
 > [!NOTE]
 > **RTK is optional, but recommended**

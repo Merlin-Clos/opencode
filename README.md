@@ -56,5 +56,4 @@ examples.
 and [RTK](./INSTALLATION.md#rtk) improve documentation lookup, context quality,
 and shell output respectively. They are not required to start OpenCode.
 
-See the [RTK usage results](./RTK.md) for anonymized measurements from four
-machines and three users.
+See the [RTK usage results](./RTK.md) for the observed usage snapshot.
