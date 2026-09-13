@@ -1,7 +1,7 @@
 ---
 description: Record review decisions and correct only the findings selected by the developer.
 agent: task-implementation
-subtask: false
+subtask: true
 ---
 
 Load and follow the `task-fix-review` skill.
