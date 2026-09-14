@@ -210,31 +210,37 @@ integration modes.
 
 #### Connect it to this workflow
 
-This setup uses Headroom's native OpenCode plugin with an independently managed
-local proxy. The local plugin is deliberately ignored by Git and must exist at
-`~/.config/opencode/plugins/headroom.js` on each configured machine:
+> [!IMPORTANT]
+> **Start Headroom with or before OpenCode**
+>
+> The native OpenCode plugin routes requests through the Headroom proxy, but it
+> cannot use Headroom when that proxy is stopped. Either start a local service
+> whenever OpenCode starts or keep Headroom running as a persistent service.
 
-```js
-import { HeadroomPlugin } from "headroom-opencode";
+The simplest option is Headroom's persistent service installer. `--providers
+manual` without a target installs the proxy service without replacing this
+workflow's native plugin routing with a Headroom provider:
 
-export default async function plugin(input) {
-  return HeadroomPlugin(input, {
-    proxyUrl:
-      process.env.HEADROOM_PROXY_URL ??
-      "http://127.0.0.1:8787",
-  });
-}
+```bash
+headroom install apply \
+  --preset persistent-service \
+  --scope user \
+  --providers manual
 ```
+
+Check the managed service with `headroom install status`. Alternatively, create
+an operating-system user service and arrange for the OpenCode launcher or plugin
+to start it. Do not use both options on the same port.
 
 The config directory must also have a local `package.json` dependency on
 `headroom-opencode`, as required for imports from a local OpenCode plugin. Both the
 local package manifest and its installed dependencies are ignored because they are
 machine-managed integration state.
 
-Make the proxy available at `HEADROOM_PROXY_URL`, or at the plugin's default
-`http://127.0.0.1:8787`. Use Headroom's official diagnostics and statistics to
-verify the proxy, then send an OpenCode request and confirm that the request count
-increases. OpenCode loads local plugins at startup.
+The proxy is available at the plugin's default `http://127.0.0.1:8787`. Use
+`headroom doctor` and Headroom's statistics to verify it, then send an OpenCode
+request and confirm that the request count increases. OpenCode loads local
+plugins at startup.
 
 > [!IMPORTANT]
 > **Keep the native plugin and provider setup separate**
