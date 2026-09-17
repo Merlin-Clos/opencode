@@ -94,7 +94,25 @@ layers that have no stated need.
 - Do not fix an unrelated pre-existing failure. Verify that it predates the change
   when possible and report it separately.
 - Report what ran, what passed, what failed, and what could not run. Never claim a
-  check passed without running it.
+  check passed without running it.
+
+## Task Scratch Space
+
+- Give each task one scratch directory under `/tmp/opencode/`. Never write scratch
+  files directly into `/tmp/opencode` itself, into the repository, or into another
+  shared location.
+- Name it from the task: the saved task name, or a short kebab-case slug derived from
+  the request for a direct task. Create the directory when the task first needs
+  scratch space, and reuse it for every step.
+- After each step, delete the files inside it that the remaining work no longer
+  needs: extracted archives, generated fixtures, logs, large test data, and
+  experimental build output.
+- Before handoff, decide whether everything left is disposable. Delete the whole
+  directory when it is. Otherwise keep it and report what remains and why.
+- Delete only files you created for the current task. Never delete user files,
+  pre-existing artifacts, repository caches, or anything outside the task scratch
+  directory.
+- When unsure a file is disposable, keep it and report it instead of deleting.
 
 ## Communication
 

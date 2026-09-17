@@ -102,6 +102,8 @@ During implementation:
 - handle stale responses and duplicate mutations when the flow permits them;
 - use existing dependencies after checking their documentation and types;
 - remove obsolete code made unnecessary by the change;
+- keep temporary files in the task scratch directory and remove the ones later
+  steps no longer need;
 - avoid unrelated cleanup.
 
 If repository evidence disproves the task contract, stop with the conflicting fact
@@ -144,6 +146,9 @@ Classify every failure:
 - environment or access failure: report the command, error, and missing condition.
 
 Never claim a check passed unless its command completed successfully.
+
+Before handoff, sweep the task scratch directory: delete it when everything left is
+disposable, otherwise report what remains and why.
 
 ## Update a Saved Task
 
