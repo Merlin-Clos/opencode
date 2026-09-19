@@ -43,8 +43,9 @@
   that produce distinct outcomes and make sure each has a useful test.
 - Use McCabe cyclomatic complexity to guide basis path testing, not as a test quota.
   For binary decisions, estimate complexity as decision points plus one.
-- When complexity exceeds 10, inspect whether untested paths or mixed
-  responsibilities create real risk. Do not demand a refactor from the score alone.
+- When deterministic complexity signals identify a hotspot, inspect whether
+  independent behavior paths remain untested. Do not create a finding from a
+  numeric threshold alone.
 - Use branch and condition coverage as diagnostic signals for important logic.
   Missing coverage matters when it reveals an untested result or independent path.
 - Do not require complete path coverage, systematic multiple-condition coverage,

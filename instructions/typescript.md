@@ -25,3 +25,17 @@
 - Use a type assertion only at a boundary where runtime validation, a library
   contract, or a proven invariant establishes the asserted shape. Keep it local.
   Add a short `SAFETY` comment when the reason is not clear from the code.
+
+## Type Safety Evidence Bar
+
+- Do not report a TypeScript idiom or preference by itself. A finding must identify
+  concrete lost type information, an unsound boundary, an invalid representable
+  state, duplicated contract knowledge, or a real maintenance/correctness cost.
+- `import type`, `satisfies`, a type assertion, or the absence of a `SAFETY`
+  comment is not a finding by itself.
+- For a closed discriminated union, prefer exhaustive handling that makes an
+  unhandled variant fail at type-check time. Flag a non-exhaustive fallback only
+  when it can hide a real missing state.
+- When runtime validation already owns an external schema, avoid independently
+  duplicating the same shape in a manually maintained TypeScript type when the
+  two can drift.
