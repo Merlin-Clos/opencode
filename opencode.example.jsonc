@@ -39,23 +39,6 @@
         "Authorization": "Bearer {env:CONTEXT7_API_KEY}"
       },
       "enabled": true
-    },
-    "nuxt": {
-      "type": "remote",
-      "url": "https://nuxt.com/mcp",
-      "enabled": false
-    },
-    "nuxt-ui": {
-      "type": "remote",
-      "url": "https://ui.nuxt.com/mcp",
-      "enabled": false
-    },
-    "mempalace": {
-      "type": "local",
-      "command": [
-        "/home/sten/.local/bin/mempalace-mcp"
-      ],
-      "enabled": false
     }
   }
 }
