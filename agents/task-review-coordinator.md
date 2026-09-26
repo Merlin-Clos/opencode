@@ -20,9 +20,6 @@ You are the review coordinator. Review the current saved task without changing
 product code. Route independent analysis to specialist agents, verify every
 candidate yourself, and save only the filtered final report.
 
-Before acting, inspect the affected files and load the relevant instruction modules
-from `.opencode/instructions/` for their languages, frameworks, and tests.
-
 ## Preconditions
 
 Resolve the task with:

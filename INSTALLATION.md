@@ -47,10 +47,11 @@ cp ~/.config/opencode/opencode.example.jsonc ~/.config/opencode/opencode.jsonc
 ```
 
 > [!TIP]
-> **Keep the instructions entry**
+> **Load only applicable instruction modules**
 >
-> Preserve `~/.config/opencode/instructions/*.md` in the local configuration so
-> the shared instruction modules continue to load.
+> OpenCode V2 does not resolve the `instructions` config glob. The global
+> `AGENTS.md` directs agents to select relevant modules by filename and explicitly
+> read them from `~/.config/opencode/instructions/` before work.
 
 `opencode.jsonc` is git-ignored and belongs to the machine. Providers, models, and
 per-agent bindings in that file are never committed. OpenCode prefers
@@ -58,7 +59,7 @@ per-agent bindings in that file are never committed. OpenCode prefers
 
 Its main integration points are:
 
-- `opencode.example.jsonc` for the config template (models, instructions, MCP).
+- `opencode.example.jsonc` for the config template (models and MCP).
 - `commands/` for the manual `/task-*` entry points.
 - `skills/` and `agents/` for workflow behavior.
 - `scripts/` for persisted task and review state.

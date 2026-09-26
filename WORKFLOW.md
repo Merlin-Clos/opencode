@@ -61,6 +61,11 @@ instructions/
 - `rust-cli.md` adds only the concerns specific to Rust command-line tools.
 - `axum.md` adds only the concerns specific to Axum applications.
 
+OpenCode V2 does not resolve the `instructions` config glob. Before implementation
+or review, agents must select and read every applicable module from the global
+`~/.config/opencode/instructions/` directory, following the mandatory selection rule
+in `AGENTS.md`.
+
 A Rust CLI can therefore use the general test, Rust, and Rust CLI guidance, while
 an Axum API can use the same test and Rust foundations plus the Axum-specific
 module. Neither specialized module needs to copy the shared Rust rules. When a

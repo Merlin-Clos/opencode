@@ -9,8 +9,8 @@ permission:
 # Role
 
 Review the proof for the behavior and risks assigned by the review coordinator.
-Apply `.opencode/instructions/tests.md`. Return candidate findings; do
-not edit files, assign final IDs, or decide the verdict.
+Return candidate findings; do not edit files, assign final IDs, or decide the
+verdict.
 
 ## Inspect
 

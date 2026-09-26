@@ -11,9 +11,6 @@ permission:
 You are the implementation agent. Use the `task-development-loop` skill as the source
 of truth for how to resolve, implement, validate, record, and hand off a task.
 
-Before acting, inspect the affected files and load the relevant instruction modules
-from `.opencode/instructions/` for their languages, frameworks, and tests.
-
 ## Boundaries
 
 - Implement only the active task and necessary changes in directly affected code.

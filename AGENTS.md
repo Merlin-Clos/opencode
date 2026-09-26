@@ -16,7 +16,20 @@ layers that have no stated need.
 - Follow the repository formatter, linter, type checker, tests, and build
   configuration. Do not invent competing style rules.
 - Check the documentation and types of an existing dependency before assuming it
-  lacks a needed capability.
+  lacks a needed capability.
+
+## Applicable Instruction Modules
+
+- Before implementing or reviewing a task, inspect the filenames in
+  `~/.config/opencode/instructions/`.
+- You MUST read and apply every module whose filename concerns, correlates with, or
+  is necessary for the task's language, technology, framework, or practice.
+- Select modules by filename. Do not read every module to determine applicability.
+- If it is unclear whether a module applies, ask the developer whether to use it for
+  this task before proceeding.
+- Read each applicable module in full before acting and apply all applicable modules
+  together.
+- Do not rely on the OpenCode `instructions` config glob to load these files.
 
 ## Scope and Design
 

@@ -20,14 +20,24 @@
 - Test code through its observable behavior and public contracts. Do not assert
   internal helper calls or exact structure unless they form part of the contract.
 - Use an integration test when the risk lies at a real boundary between modules,
-  such as a mapper, service, store, router, or validation resolver.
+  such as a mapper, service, store, router, or validation resolver.
 - Do not replace a useful lower-level test with a broad test that makes failures
-  harder to locate.
+  harder to locate.
+- Use end-to-end tests for important user-visible workflows whose risks cross real
+  application boundaries. Keep focused lower-level tests for rules and failures
+  they prove more clearly; end-to-end tests complement rather than replace them.
+- Make end-to-end verification repeatable with the exact command and stable inputs.
+  Preserve a report, trace, screenshot, or similar artifact when repository tooling
+  or acceptance criteria make it useful. Do not create bulky artifacts without a
+  clear consumer.
 
 ## Black-Box Case Selection
 
 - Use equivalence partitioning to group valid and invalid inputs that should behave
-  alike. Test a representative from each relevant group instead of every value.
+  alike. Test a representative from each relevant group instead of every value.
+- For an isolated unit, identify its meaningful failure modes before selecting
+  cases. Cover distinct reachable outcomes without trying to enumerate speculative
+  or unbounded failure possibilities.
 - Use boundary value analysis for ranges, sizes, limits, dates, ordering, and other
   edges. Test the boundary and the nearest meaningful value on each side.
 - Use decision table testing when several conditions interact. Cover combinations
@@ -61,8 +71,13 @@
   original behavior and passes after the fix.
 - Keep the regression test focused on the broken contract, not the implementation
   detail that caused it.
-- Prefer test-driven development for business rules, bug fixes, pure transforms,
-  and branching behavior when the expected result can be stated first.
+- For reproducible bugs, business rules, pure transforms, state transitions, and
+  important branching behavior, write a test that fails for the intended reason
+  before changing production code whenever the expected behavior can be stated and
+  a useful test level is available.
+- Do not implement first and add tests afterward merely to ratify the chosen
+  implementation. When test-first is impractical or adds no value, state why and
+  use another useful proof.
 - Use the red-green-refactor cycle: write one meaningful failing test, make the
   smallest coherent change that passes, then improve the code while tests stay
   green.
