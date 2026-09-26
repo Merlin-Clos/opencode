@@ -1,6 +1,6 @@
 ---
 description: Coordinates an incremental review of the current implemented task, validates specialist findings, and saves one final review report.
-mode: subagent
+mode: primary
 permission:
   edit: deny
   bash: allow

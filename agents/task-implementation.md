@@ -1,6 +1,6 @@
 ---
 description: Implements an approved or direct software task with focused changes, useful tests, and full repository validation before handoff.
-mode: subagent
+mode: primary
 permission:
   edit: allow
   bash: allow

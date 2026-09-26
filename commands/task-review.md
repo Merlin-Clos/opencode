@@ -1,7 +1,7 @@
 ---
 description: Run and save an incremental multi-agent review of the current implemented task.
 agent: task-review-coordinator
-subtask: false
+subagent: false
 ---
 
 Load and follow the `task-review` skill.
