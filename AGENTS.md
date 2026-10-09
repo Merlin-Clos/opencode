@@ -129,8 +129,8 @@ layers that have no stated need.
 
 ## Communication
 
-- Write repository instructions, task records, review reports, code comments, and
-  agent output in English.
+- Speak to the developer in the language the developer uses with you for all user-facing output (answers, questions, explanations, summaries). Keep repository instructions, task records, review reports, and code comments in English.
+- Keep technical jargon in its original language (usually English). Never translate code identifiers, file paths, `file_path:line_number` references, commands, error messages, or established technical terms.
 - Use direct, precise, and short language.
 - Separate verified facts from assumptions.
 - Explain a non-obvious choice through its constraint and effect, not through a
