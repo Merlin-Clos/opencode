@@ -39,6 +39,10 @@
         "Authorization": "Bearer {env:CONTEXT7_API_KEY}"
       },
       "enabled": true
+    },
+    "rea": {
+      "type": "local",
+      "command": ["npx", "-y", "rea-agents@6.4.0", "--mcp"]
     }
   }
 }
