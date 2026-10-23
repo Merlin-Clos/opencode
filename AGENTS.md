@@ -160,6 +160,10 @@ Use the plain command when RTK has no suitable wrapper, exact raw output matters
 or the wrapper's behavior is unclear. If `rtk` is unavailable, run the plain
 command and note the fallback.
 
+## File Search — always use fff
+
+Use the fff MCP tools for all file search operations instead of default tools.
+
 ## Documentation — always verify with Context7
 
 Use Context7 MCP to cross-reference official documentation for every library, API, or config step involved. Never rely on internal memory when external documentation is available. Always verify against the project's specific versions.

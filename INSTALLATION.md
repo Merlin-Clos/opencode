@@ -11,13 +11,15 @@ time and belong to each upstream project.
 > apply the repository-specific integration described in this document.
 
 OpenCode is required. The supporting integrations are optional, but recommended
-because they improve documentation lookup, context quality, and shell output.
+because they improve documentation lookup, file search, context quality, and
+shell output.
 
 | Integration | Main benefit | Required? |
 | --- | --- | --- |
 | [Context7](#context7) | Current, version-specific documentation. | No |
 | [Headroom](#headroom) | Cleaner, smaller model context. | No, recommended |
 | [RTK](#rtk) | More focused shell output. | No, recommended |
+| [fff-mcp](#fff-mcp) | Fast, frecency-ranked file search. | No, recommended |
 
 ## OpenCode
 
@@ -305,6 +307,53 @@ on unfamiliar wrappers.
 Use RTK's official version, integration inspection, and savings commands to verify
 that the installed binary is the expected project and that OpenCode shell activity
 is being tracked.
+
+## fff-mcp
+
+### Why it is used
+
+Broad file search returns noisy results: every irrelevant match costs context
+and attention, and crowds out the files that matter. fff-mcp is a local,
+high-performance file finder built for AI code assistants. It ranks results by
+frecency (frequent and recent files first), searches file names and contents,
+and watches the filesystem so results stay current. Agents use its
+`find_files`, `grep`, and `multi_grep` tools instead of the default file search
+tools, which keeps discovery fast and the context focused on relevant files.
+
+> [!NOTE]
+> **fff-mcp is optional, but recommended**
+>
+> It does not prevent OpenCode from working when disabled. Without it, agents
+> fall back to the default file search tools, which are slower and noisier on
+> large repositories.
+
+### Official installation
+
+Install the `fff-mcp` binary from the
+[official fff repository](https://github.com/dmtrKovalenko/fff) so it is
+available on `PATH`. Use that repository as the source of truth for supported
+platforms, upgrades, and server options.
+
+### Connect it to this workflow
+
+`opencode.example.jsonc` registers `fff-mcp` as a local MCP server. Copying
+that template to the git-ignored `opencode.jsonc` wires it in with no further
+configuration once the binary is on `PATH`:
+
+```jsonc
+"mcp": {
+  "fff": {
+    "type": "local",
+    "command": ["fff-mcp"],
+    "enabled": true
+  }
+}
+```
+
+`AGENTS.md` directs agents to use the fff MCP tools for all file search
+operations instead of the default tools. Use OpenCode's MCP management commands
+to confirm that `fff` is enabled and reachable. See the
+[official OpenCode MCP documentation](https://opencode.ai/docs/mcp-servers/).
 
 ## Security and Local State
 

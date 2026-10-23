@@ -53,7 +53,8 @@ examples.
 ## Optional Integrations
 
 [Context7](./INSTALLATION.md#context7), [Headroom](./INSTALLATION.md#headroom),
-and [RTK](./INSTALLATION.md#rtk) improve documentation lookup, context quality,
-and shell output respectively. They are not required to start OpenCode.
+[RTK](./INSTALLATION.md#rtk), and [fff-mcp](./INSTALLATION.md#fff-mcp) improve
+documentation lookup, context quality, shell output, and file search
+respectively. They are not required to start OpenCode.
 
 See the [RTK usage results](./RTK.md) for the observed usage snapshot.
