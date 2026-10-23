@@ -123,3 +123,49 @@
   contract and remove obsolete expectations. Do not preserve old behavior without
   a stated compatibility need.
 - Treat coverage reports as evidence for finding gaps, not as proof of correctness.
+
+## Volume and Signal
+
+- Prefer the smallest suite with the strongest signal.
+- Before adding a test, confirm it protects a distinct outcome, boundary, failure
+  mode, or contract.
+- Do not add duplicates or Cartesian products that prove the same thing twice.
+- Prefer one clear test per distinct risk over many overlapping variants.
+
+## Mutation Testing
+
+- When the repository already configures a mutation testing tool (Stryker, PIT,
+  mutmut, or equivalent), use its report as a diagnostic for assertion strength
+  and case relevance.
+- Ignore this section when no such tool is present or configured.
+- Treat the mutation score as a signal, never as a quota.
+
+## When to Delete or Reduce Tests
+
+- Prefer a small high-signal suite over a large low-signal one. Strengthen or
+  merge when the risk is still real; delete when it is not.
+- Ask: "Has this test ever caught a real defect or does it guard a significant
+  risk?" When clearly not and it costs maintenance, remove it.
+- Consider deleting tests that:
+  - only verify what the types already guarantee;
+  - cover trivial logic, getters/setters, or basic DOM behavior;
+  - depend on real or fake timers and assert timing rather than behavior;
+  - only assert mock calls and mirror the implementation;
+  - are low-value smoke tests;
+  - duplicate another table case;
+  - assert wall-clock performance;
+  - are flaky and cannot be made reliable quickly;
+  - guard only an implementation detail outside the public contract;
+  - protect exactly the same outcome as a clearer test.
+- Keep in priority tests that cover:
+  - orchestration and event sourcing;
+  - auth and permissions;
+  - persistence and migrations;
+  - external format parsing;
+  - business guards and invariants;
+  - deterministic race fixes;
+  - critical paths and real boundaries.
+- On timers: prefer deterministic synchronization (await the observable state
+  change) over sleeps, timeouts, or wall-clock asserts. Keep a timer-based test
+  only when timing is the contract and it is stable; otherwise replace it or
+  delete it.

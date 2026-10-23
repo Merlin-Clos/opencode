@@ -129,8 +129,9 @@ generic enough to be reused elsewhere.
 
 - `/task-brainstorm` inspects the repository, asks only necessary questions, and
   saves the approved contract only when persistence is chosen.
-- `/task-implement` applies the approved scope, runs the required checks, and
-  records the result for a saved task.
+- `/task-implement` runs in the foreground as coordinator: it delegates failing
+  tests to the `task-test` subagent first, then the minimal fix to the
+  `task-code` subagent, and records the result for a saved task.
 - `/task-review` routes independent analysis through the review coordinator and
   specialist agents, validates their candidates, and saves one final report.
 - `/task-fix-review` records developer decisions, changes only accepted findings,
@@ -282,7 +283,8 @@ task, not later changes to `mon-ai-agent.json`.
 - `commands/`: manual `/task-brainstorm`, `/task-implement`, `/task-review`, and
   `/task-fix-review` entry points.
 - `skills/`: task workflows, including the internal `task-development-loop`.
-- `agents/`: discovery, implementation, review coordination, and review
+- `agents/`: discovery, implementation coordination (`task-implementation` with
+  `task-test` and `task-code` subagents), review coordination, and review
   specialists.
 - `scripts/`: saved-task and review-state operations.
 - `instructions/`: reusable technical guidance described under

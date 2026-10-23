@@ -9,6 +9,13 @@ Implement the agreed behavior, prove it, and provide one final handoff for devel
 review. Do not stop between intermediate steps or acceptance criteria. Apply the
 repository-wide and path-specific instructions; do not repeat them in task notes.
 
+> [!NOTE]
+> `/task-implement` no longer works through this loop directly. It runs in the
+> foreground as coordinator and delegates to the `task-test` subagent first,
+> then to the `task-code` subagent, as described in the `task-implement` skill.
+> This loop remains the reference for baseline, validation, status, and handoff
+> mechanics, and the engine for `/task-fix-review` corrections.
+
 ## Resolve the Task
 
 Use task input in this order:
