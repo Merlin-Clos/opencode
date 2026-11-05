@@ -106,7 +106,8 @@ generic enough to be reused elsewhere.
 
 ## Quick Start
 
-1. Run `/task-brainstorm` to frame a request and agree on its task contract.
+1. Run `/task-brainstorm <request>` to frame a request and agree on its task
+   contract. Every invocation runs the full six-role council.
 2. Choose whether to persist the approved contract. Persistence is optional for
    a small task completed in one chat.
 3. Run `/task-implement` to make and validate the change.
@@ -127,10 +128,13 @@ generic enough to be reused elsewhere.
 
 ### Automatic work
 
-- `/task-brainstorm` inspects the repository, asks only necessary questions, and
-  saves the approved contract only when persistence is chosen.
-- `/task-implement` runs in the foreground as coordinator: it delegates failing
-  tests to the `task-test` subagent first, then the minimal fix to the
+- `/task-brainstorm` coordinates discovery in the current session. It always
+  runs the full six-role council in independent specialist child sessions,
+  checks decision-relevant claims, and saves the approved contract only when
+  persistence is chosen.
+- `/task-implement` runs in the foreground as coordinator: it decides whether
+  a dedicated test phase adds value, delegates failing tests to the
+  `task-test` subagent first when it does, then the minimal fix to the
   `task-code` subagent, and records the result for a saved task.
 - `/task-review` routes independent analysis through the review coordinator and
   specialist agents, validates their candidates, and saves one final report.
@@ -150,6 +154,25 @@ It still appears in the `/` menu because only a skill with a same-named command 
 shadowed. The other skills have matching commands, while
 `task-development-loop` does not. Keeping its rules in one place avoids two
 implementations drifting apart.
+
+### Brainstorm council
+
+Every `/task-brainstorm <request>` runs the full council: four independent
+initial specialists (opportunity, failure, assumptions, feasibility), then the
+evidence verifier, then the blinded evaluator when its checks pass. There are
+no lighter modes. Call counts are instruction-level, not hard time, token, or
+cost limits, and failed or unavailable work is reported as partial.
+
+Discussion follows four adaptive stages (clarify, explore and challenge,
+converge, structure), revisited as needed rather than forced in order. The
+specialists receive limited inputs and their agent definitions deny tools;
+effective permissions can be overridden by other configuration. When the
+solution is clear, the contract may carry `Implementation Phases` inline or in
+`phase-N.md` files, with `pending → in-progress → done` (`blocked`) tracking
+that `/task-implement` executes in dependency order. Task documents include a
+Mermaid diagram only when it clarifies. See
+[`BRAINSTORM-COUNCIL.md`](./BRAINSTORM-COUNCIL.md) for the roles, security limits,
+model configuration, reproduction commands, and research context.
 
 ## Task Statuses
 
@@ -283,14 +306,16 @@ task, not later changes to `mon-ai-agent.json`.
 - `commands/`: manual `/task-brainstorm`, `/task-implement`, `/task-review`, and
   `/task-fix-review` entry points.
 - `skills/`: task workflows, including the internal `task-development-loop`.
-- `agents/`: discovery, implementation coordination (`task-implementation` with
-  `task-test` and `task-code` subagents), review coordination, and review
-  specialists.
-- `scripts/`: saved-task and review-state operations.
+- `agents/`: discovery and brainstorm specialists, implementation coordination
+  (`task-implementation` with `task-test` and `task-code` subagents), review
+  coordination, and review specialists.
+- `scripts/`: saved-task and review-state operations and the brainstorm candidate
+  normalizer.
 - `instructions/`: reusable technical guidance described under
   [Responsibility Layers](#responsibility-layers).
 - `rules/`: local command permission rules.
 - `AGENTS.md`: instructions owned by this configuration repository. Target
   repositories provide their own local context.
+- `BRAINSTORM-COUNCIL.md`: council operation, limits, evaluation, and sources.
 - `.copilot/`: optional persisted contracts, review reports, and review state in a
   target repository.

@@ -11,8 +11,9 @@ repository-wide and path-specific instructions; do not repeat them in task notes
 
 > [!NOTE]
 > `/task-implement` no longer works through this loop directly. It runs in the
-> foreground as coordinator and delegates to the `task-test` subagent first,
-> then to the `task-code` subagent, as described in the `task-implement` skill.
+> foreground as coordinator and delegates to the `task-test` subagent first
+> (only when a dedicated test phase adds value), then to the `task-code`
+> subagent, as described in the `task-implement` skill.
 > This loop remains the reference for baseline, validation, status, and handoff
 > mechanics, and the engine for `/task-fix-review` corrections.
 

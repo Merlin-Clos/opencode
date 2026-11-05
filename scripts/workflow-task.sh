@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
   printf '%s\n' "Usage: $0 -Action {create|current|set-status} [options]" >&2
   printf '%s\n' "  create: -Name NAME [-IncludeRepository PATH ...] [-AllowDirty]" >&2
-  printf '%s\n' "  set-status: -TaskPath PATH -Status {in-progress|implemented}" >&2
+  printf '%s\n' "  set-status: -TaskPath PATH -Status {approved|in-progress|implemented}" >&2
 }
 die() { printf 'Error: %s\n' "$1" >&2; exit 1; }
 case " ${*:-} " in *" -h "*|*" --help "*) usage; exit 0;; esac
@@ -95,19 +95,19 @@ fi
 
 if [ "$action" = set-status ]; then
   [ -n "$task_path" ] || die "-TaskPath is required when -Action is set-status."
-  [ "$status" = in-progress ] || [ "$status" = implemented ] || die "-Status must be in-progress or implemented."
+  [ "$status" = approved ] || [ "$status" = in-progress ] || [ "$status" = implemented ] || die "-Status must be approved, in-progress, or implemented."
   case $task_path in /*) resolved=$task_path;; *) resolved=$repo_root/$task_path;; esac
   resolved=$(cd "$(dirname "$resolved")" 2>/dev/null && printf '%s/%s' "$PWD" "$(basename "$resolved")") || die "The task file does not exist: $task_path"
   case $resolved in "$state_root"/*/task.md) ;; *) die "Task status can only be changed for a task.md file under .copilot.";; esac
   [ -f "$resolved" ] || die "The task file does not exist: $resolved"
   front=$(awk 'BEGIN{ok=0} NR==1&&$0=="---"{ok=1;next} ok&&$0=="---"{exit} ok{print}' "$resolved")
-  count=$(printf '%s\n' "$front" | awk '$0 ~ /^status:[[:space:]]*(approved|in-progress|implemented)[[:space:]]*$/ {n++} END{print n+0}')
+  count=$(printf '%s\n' "$front" | awk '$0 ~ /^status:[[:space:]]*(draft|approved|in-progress|implemented)[[:space:]]*$/ {n++} END{print n+0}')
   [ "$count" -eq 1 ] || die "The task must contain exactly one valid status in its YAML frontmatter."
   current=$(printf '%s\n' "$front" | awk '$0 ~ /^status:/ {sub(/^status:[[:space:]]*/,""); sub(/[[:space:]]*$/,""); print; exit}')
   [ "$current" = "$status" ] && { printf '%s\n' "$resolved"; exit 0; }
-  case "$current->$status" in "approved->in-progress"|"in-progress->implemented"|"implemented->in-progress") ;; *) die "Invalid task status transition: $current->$status";; esac
+  case "$current->$status" in "draft->approved"|"approved->in-progress"|"in-progress->implemented"|"implemented->in-progress") ;; *) die "Invalid task status transition: $current->$status";; esac
   tmp=$resolved.tmp
-  awk -v s="$status" 'NR==1{in_fm=($0=="---")} in_fm&&$0 ~ /^status:[[:space:]]*(approved|in-progress|implemented)[[:space:]]*$/ {print "status: " s; next} in_fm&&NR>1&&$0=="---"{in_fm=0} {print}' "$resolved" > "$tmp"
+  awk -v s="$status" 'NR==1{in_fm=($0=="---")} in_fm&&$0 ~ /^status:[[:space:]]*(draft|approved|in-progress|implemented)[[:space:]]*$/ {print "status: " s; next} in_fm&&NR>1&&$0=="---"{in_fm=0} {print}' "$resolved" > "$tmp"
   mv "$tmp" "$resolved"; printf '%s\n' "$resolved"; exit 0
 fi
 

@@ -14,10 +14,12 @@ task. You do not modify production code.
 ## Input
 
 The coordinator gives you the resolved `task.md` path, the task name, and the
-in-scope paths. Read the whole `task.md` before touching code, then inspect
-the directly involved files, existing tests, types, schemas, and repository
-checks. Decide which behaviors and risks from `task.md` need coverage and at
-which level.
+in-scope paths, narrowed to the code that must keep working when the task
+mixes production changes with throwaway helpers. Do not expand scope to
+helper, benchmark, or scratch scripts unless asked. Read the whole `task.md`
+before touching code, then inspect the directly involved files, existing
+tests, types, schemas, and repository checks. Decide which behaviors and
+risks from `task.md` need coverage and at which level.
 
 ## Rules
 
